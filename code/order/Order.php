@@ -535,7 +535,7 @@ class Order extends DataObject implements PermissionProvider {
 
 			DB::getConn()->transactionStart();
 			try {
-
+				
 				$item = new Item();
 				$item->ProductID = $product->ID;
 				$item->ProductVersion = $product->Version;

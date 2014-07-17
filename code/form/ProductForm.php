@@ -221,18 +221,17 @@ class ProductForm extends Form {
 
 		$productVariation = new Variation();
 		$request = $this->getRequest();
-		$options = $request->requestVar('Options');
+		$SelectedVariation = $request->requestVar('SelectedVariation');
 		$product = $this->product;
-		$variations = $product->Variations();
+		$variations = $product->Variations()->find('ID', $SelectedVariation);
 
 		if ($variations && $variations->exists()) foreach ($variations as $variation) {
-
-			$variationOptions = $variation->Options()->map('AttributeID', 'ID')->toArray();
-			if ($options == $variationOptions && $variation->isEnabled()) {
+			
+			if ($variation && $variation->ID && $variation->isEnabled()) {
 				$productVariation = $variation;
 			}
 		}
-
+		
 		return $productVariation;
 	}
 
@@ -300,19 +299,31 @@ class ProductForm_Validator extends RequiredFields {
 		
 		$productVariations = new ArrayList();
 
-		$options = $request->postVar('Options');
+		$options 				= $request->postVar('Options');
+		$selectedVariation 		= $request->postVar('SelectedVariation');
+		$hasSelectedVariation 	= false;
+		
 		$product = DataObject::get_by_id($data['ProductClass'], $data['ProductID']);
 		$variations = ($product) ? $product->Variations() : new ArrayList();
-
-		if ($variations && $variations->exists()) foreach ($variations as $variation) {
-			
-			$variationOptions = $variation->Options()->map('AttributeID', 'ID')->toArray();
-			if ($options == $variationOptions && $variation->isEnabled()) {
-				$productVariations->push($variation);
+		
+		if($selectedVariation === null){
+			if ($variations && $variations->exists()) foreach ($variations as $variation) {
+					
+				$variationOptions = $variation->Options()->map('AttributeID', 'ID')->toArray();
+				if ($options == $variationOptions && $variation->isEnabled()) {
+					$productVariations->push($variation);
+				}
+			}
+		}else{
+			if($selectedVariation && $variations && $variations->exists()){
+				$vDO = $variations->find('ID', $selectedVariation);
+				if($vDO && $vDO->ID){
+					$hasSelectedVariation = true;
+				}
 			}
 		}
-		
-		if ((!$productVariations || !$productVariations->exists()) && $product && $product->requiresVariation()) {
+
+		if ( (! $hasSelectedVariation && $selectedVariation) ) {
 			$this->form->sessionMessage(
 				_t('ProductForm.VARIATIONS_REQUIRED', 'This product requires options before it can be added to the cart.'),
 				'bad'

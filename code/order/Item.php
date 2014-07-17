@@ -155,7 +155,14 @@ class Item extends DataObject {
 	 * @return Mixed Variation if it exists, otherwise null
 	 */
 	function Variation() {
-		return ($this->VariationID) ? Versioned::get_version('Variation', $this->VariationID, $this->VariationVersion) : null;
+		
+		$Variation = Variation::get()->byID($this->VariationID);
+		
+		if( ! $Variation || ! $Variation->ID){
+			$Variation = Versioned::get_version('Variation', $this->VariationID, $this->VariationVersion);
+		}
+		
+		return ($this->VariationID) ? $Variation : null;
 	}
 	
 	/**
@@ -240,4 +247,21 @@ class Item extends DataObject {
 		$summary .= implode('<br /> ', $options);
 		return $summary;
 	}
+	
+	
+	public function SimpleOrComplexProduct(){
+		$Variation = $this->Variation();
+		
+		if($Variation && $Variation->ID){
+			$simpleProduct = $Variation->getLinkProductDO();
+			Debug::show($Variation);
+			if($simpleProduct && $simpleProduct->ID){
+				return $simpleProduct;
+			}
+		}
+		
+		return $this->Product();
+	}
+	
+	
 }
