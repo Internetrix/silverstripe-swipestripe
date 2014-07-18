@@ -254,7 +254,6 @@ class Item extends DataObject {
 		
 		if($Variation && $Variation->ID){
 			$simpleProduct = $Variation->getLinkProductDO();
-			Debug::show($Variation);
 			if($simpleProduct && $simpleProduct->ID){
 				return $simpleProduct;
 			}
