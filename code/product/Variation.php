@@ -441,6 +441,8 @@ class Variation extends DataObject implements PermissionProvider {
 				}
 			}
 		}
+		
+		$this->extend('VariationonAfterWrite');
 
 		//Unpublish product if variations do not exist
 		// $product = $this->Product();
