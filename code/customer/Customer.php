@@ -10,6 +10,8 @@
 class Customer extends Member {
 
 	private static $db = array(
+		'Phone' => 'Varchar(255)',
+		'Fax' 	=> 'Varchar(255)',
 		'Code' => 'Int' //Just to trigger creating a Customer table
 	);
 	
@@ -120,7 +122,18 @@ class Customer extends Member {
 	static function currentUser() {
 		$id = Member::currentUserID();
 		if($id) {
-			return DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+			$customerRecord = DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+			
+			if($customerRecord && $customerRecord->ID){
+				return $customerRecord;
+			}else{
+				//member exists, mark it as customer
+				$memberRecord = DataObject::get_one("Member", "\"Member\".\"ID\" = $id");
+				$memberRecord->ClassName = 'Customer';
+				$memberRecord->write();
+				
+				return DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+			}
 		}
 	}
 }

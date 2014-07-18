@@ -79,27 +79,40 @@ class OrderForm extends Form {
 			$personalFields = CompositeField::create(
 				new HeaderField(_t('CheckoutPage.ACCOUNT',"Account"), 3),
 				new CompositeField(
-					EmailField::create('Email', _t('CheckoutPage.EMAIL', 'Email'))
+					$emailfield = EmailField::create('Email', _t('CheckoutPage.EMAIL', 'Email'))
 						->setCustomValidationMessage(_t('CheckoutPage.PLEASE_ENTER_EMAIL_ADDRESS', "Please enter your email address."))
 				),
 				new CompositeField(
 					new FieldGroup(
-						new ConfirmedPasswordField('Password', _t('CheckoutPage.PASSWORD', "Password"))
-					)
-				),
-				new CompositeField(
-					new LiteralField(
-						'AccountInfo', 
-						"
-						<p class=\"alert alert-info\">
-							<strong class=\"alert-heading\">$note</strong>
-							$passwd <br /><br />
-							$mber
-						</p>
-						"
+						new ConfirmedPasswordField('* Password', _t('CheckoutPage.PASSWORD', "Password"))
 					)
 				)
+				,new CompositeField(
+					TextField::create('FirstName', '* First Name'),
+					TextField::create('Surname', '* Surname'),
+					TextField::create('Phone', '* TELEPHONE'),
+					TextField::create('Fax', 'Fax')
+				)
+// 				, new CompositeField(
+// 					new LiteralField(
+// 						'AccountInfo', 
+// 						"
+// 						<p class=\"alert alert-info\">
+// 							<strong class=\"alert-heading\">$note</strong>
+// 							$passwd <br /><br />
+// 							$mber
+// 						</p>
+// 						"
+// 					)
+// 				)
 			)->setID('PersonalDetails')->setName('PersonaDetails');
+			
+			
+			$memberDO = Member::currentUser();
+			if($memberDO && $memberDO->Email){
+				$emailfield->setValue($memberDO->Email);
+				$personalFields->replaceField('* Password', HiddenField::create('Password', 'Password', '********'));
+			}
 		}
 
 		//Order item fields
@@ -267,10 +280,10 @@ class OrderForm extends Form {
 		}
 
 		//Save or create a new customer/member
-		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
+		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');Debug::show($member);die;
 		if (!$member->exists()) {
 
-			$existingCustomer = Customer::get()->filter('Email', $data['Email']);
+			$existingCustomer = Member::get()->filter('Email', $data['Email']);
 			if ($existingCustomer && $existingCustomer->exists()) {
 				$form->sessionMessage(
 					_t('CheckoutPage.MEMBER_ALREADY_EXISTS', 'Sorry, a member already exists with that email address. If this is your email address, please log in first before placing your order.'),
