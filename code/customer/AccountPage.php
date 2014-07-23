@@ -167,6 +167,10 @@ class AccountPage_Controller extends Page_Controller {
 			if (!$order->canView($member)) {
 				return $this->httpError(403, _t('AccountPage.CANNOT_VIEW_ORDER', 'You cannot view orders that do not belong to you.'));
 			}
+			
+			if($member->IsGuest){
+				$member->logOut();
+			}
 
 			return array(
 				'Order' => $order
