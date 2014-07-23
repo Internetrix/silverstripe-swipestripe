@@ -439,9 +439,14 @@ class Order extends DataObject implements PermissionProvider {
 	 * @see PaypalExpressCheckoutaPayment_Handler::doRedirect()
 	 * @return String URL for viewing this order
 	 */
-	public function Link() {
+	public function Link($isReseller = false) {
 		//get the account page and go to it
-		$account = DataObject::get_one('AccountPage');
+		if($isReseller){
+			$account = ResellerAccountPage::get()->filter(array('ClassName' => 'ResellerAccountPage'))->first();
+		}else{
+			$account = AccountPage::get()->filter(array('ClassName' => 'AccountPage'))->first();
+		}
+		
 		return $account->Link()."order/$this->ID";
 	}
 

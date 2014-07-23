@@ -7,6 +7,7 @@ class OrderForm extends Form {
 
 	protected $order;
 	protected $customer;
+	protected $isReseller;
 
 	private static $allowed_actions = array(
 		'process',
@@ -35,6 +36,12 @@ class OrderForm extends Form {
 
 		$this->order = Cart::get_current_order();
 		$this->customer = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
+		
+		$this->isReseller = false;
+		$resellerGroup = Group::get()->filter(array('Code' => 'resellers'))->first();
+		if($this->customer && $this->customer->ID && $resellerGroup && $resellerGroup->ID && $this->customer->inGroup($resellerGroup)){
+			$this->isReseller = true;
+		}
 
 		$this->fields = $this->createFields();
 		$this->actions = $this->createActions();
@@ -150,6 +157,13 @@ class OrderForm extends Form {
 		foreach ($supported_methods as $methodName) {
 			$methodConfig = PaymentFactory::get_factory_config($methodName);
 			$source[$methodName] = $methodConfig['title'];
+		}
+		
+		ksort($source);
+		
+		//change the payment option order if member is in reseller group.
+		if( ! $this->isReseller && ! empty($source) && key_exists('Cheque', $source)){
+			unset($source['Cheque']);
 		}
 
 		$paymentFields = CompositeField::create(
@@ -388,7 +402,7 @@ class OrderForm extends Form {
 			$paymentProcessor->payment->OrderID = $order->ID;
 			$paymentProcessor->payment->PaidByID = $member->ID;
 
-			$paymentProcessor->setRedirectURL($order->Link());
+			$paymentProcessor->setRedirectURL($order->Link($this->isReseller));
 			$paymentProcessor->capture($paymentData);
 		}
 		catch (Exception $e) {
