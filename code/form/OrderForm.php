@@ -84,7 +84,7 @@ class OrderForm extends Form {
 				),
 				new CompositeField(
 					new FieldGroup(
-						new ConfirmedPasswordField('* Password', _t('CheckoutPage.PASSWORD', "Password"))
+						new ConfirmedPasswordField('Password', _t('CheckoutPage.PASSWORD', "* Password"))
 					)
 				)
 				,new CompositeField(
@@ -111,7 +111,7 @@ class OrderForm extends Form {
 			$memberDO = Member::currentUser();
 			if($memberDO && $memberDO->Email){
 				$emailfield->setValue($memberDO->Email);
-				$personalFields->replaceField('* Password', HiddenField::create('Password', 'Password', '********'));
+				$personalFields->removeByName('Password');
 			}
 		}
 
@@ -160,9 +160,21 @@ class OrderForm extends Form {
 				$source
 			)->setCustomValidationMessage(_t('CheckoutPage.SELECT_PAYMENT_METHOD',"Please select a payment method."))
 		)->setName('PaymentFields');
-
+		
+		
+		$mothodFields = CompositeField::create(
+			OptionsetField::create(
+				'CheckoutMethod',
+				'Select Checkout Method',
+				array(
+					'GuestCheckout' => 'GuestCheckout',
+					'DoRegister' => 'DoRegister'	
+				)
+			)
+		)->setName('MethodFields');
 
 		$fields = FieldList::create(
+			$mothodFields,
 			$itemFields,
 			$subTotalModsFields,
 			$totalModsFields,
@@ -264,6 +276,9 @@ class OrderForm extends Form {
 
 	public function process($data, $form) {
 		$this->extend('onBeforeProcess', $data);
+		
+		$postData = $this->request->postVars();
+		$postData = Convert::raw2sql($postData);
 
 		//Check payment type
 		try {
@@ -279,25 +294,59 @@ class OrderForm extends Form {
 			return;
 		}
 
-		//Save or create a new customer/member
-		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');Debug::show($member);die;
-		if (!$member->exists()) {
+		if(isset($postData['Method']) && $postData['Method'] == 'GuestCheckout'){
+			$IsGuest = true;
+		}else{
+			$IsGuest = false;
+		}
 
-			$existingCustomer = Member::get()->filter('Email', $data['Email']);
-			if ($existingCustomer && $existingCustomer->exists()) {
-				$form->sessionMessage(
-					_t('CheckoutPage.MEMBER_ALREADY_EXISTS', 'Sorry, a member already exists with that email address. If this is your email address, please log in first before placing your order.'),
-					'bad'
-				);
-				$this->controller->redirectBack();
-				return false;
+		//Save or create a new customer/member if user 
+		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
+		if( ! $IsGuest){
+			//if it's not guest checkout, do the normal process.
+			if (!$member->exists()) {
+	
+				$existingCustomer = Member::get()->filter('Email', $data['Email']);
+				if ($existingCustomer && $existingCustomer->exists()) {
+					$form->sessionMessage(
+						_t('CheckoutPage.MEMBER_ALREADY_EXISTS', 'Sorry, a member already exists with that email address. If this is your email address, please log in first before placing your order.'),
+						'bad'
+					);
+					$this->controller->redirectBack();
+					return false;
+				}
+	
+				$member = Customer::create();
+				$form->saveInto($member);
+				$member->write();
+				$member->addToGroupByCode('customers');
+				$member->logIn();
+			}else{
+				//if the old record is guest, then update the password
+				if($member->IsGuest){
+					$form->saveInto($member);
+					$member->IsGuest = false;
+					$member->write();
+					$member->logIn();
+				}
 			}
-
-			$member = Customer::create();
-			$form->saveInto($member);
-			$member->write();
-			$member->addToGroupByCode('customers');
-			$member->logIn();
+		}else{
+			if ( ! $member->exists()) {
+				$member = Customer::create();
+				$form->saveInto($member);
+				$member->IsGuest = true;
+				$member->Password = '';
+				$member->write();
+				$member->addToGroupByCode('customers');
+				$member->logIn();
+			}else{
+				//if guest member record exists, update details
+				$form->saveInto($member);
+				$member->IsGuest = true;
+				$member->Password = '';
+				$member->write();
+				$member->logIn();
+			}
 		}
 		
 		//Save the order

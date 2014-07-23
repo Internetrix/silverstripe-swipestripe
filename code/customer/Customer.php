@@ -10,9 +10,23 @@
 class Customer extends Member {
 
 	private static $db = array(
-		'Phone' => 'Varchar(255)',
-		'Fax' 	=> 'Varchar(255)',
-		'Code' => 'Int' //Just to trigger creating a Customer table
+		'Phone' 		=> 'Varchar(255)',
+		'Fax' 			=> 'Varchar(255)',
+		'Company' 		=> 'Varchar',
+		'Address' 		=> 'Varchar(255)',
+		'AddressLine2' 	=> 'Varchar(255)',
+		'City' 			=> 'Varchar(100)',
+		'PostalCode' 	=> 'Varchar(30)',
+		'State' 		=> 'Varchar(100)',
+		//De-normalise these values in case region or country is deleted
+		'CountryName' 	=> 'Varchar',
+		'CountryCode' 	=> 'Varchar(2)', //ISO 3166 
+		'RegionName' 	=> 'Varchar',
+		'RegionCode' 	=> 'Varchar(2)',
+			
+		'IsGuest' 		=> 'Boolean',	
+			
+		'Code' 			=> 'Int' //Just to trigger creating a Customer table
 	);
 	
 	/**
