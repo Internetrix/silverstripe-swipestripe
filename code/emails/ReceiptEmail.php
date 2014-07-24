@@ -33,6 +33,10 @@ class ReceiptEmail extends ProcessedEmail {
 		elseif (Email::getAdminEmail()) $this->from = Email::getAdminEmail();
 		else $this->from = 'no-reply@' . $_SERVER['HTTP_HOST'];
 		
+		if($siteConfig->ReceiptBcc){
+			$bcc = $siteConfig->ReceiptBcc;
+		}
+		
 		if ($siteConfig->EmailSignature) $this->signature = $siteConfig->EmailSignature;
 
 		//Get css for Email by reading css file and put css inline for emogrification

@@ -316,6 +316,7 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 					TextField::create('ReceiptTo', _t('ShopConfig.TO', 'To'))
 						->setValue(_t('ShopConfig.RECEIPT_TO', 'Sent to customer'))
 						->performReadonlyTransformation(),
+					new TextField('ReceiptBcc', 'Bcc'),
 					new TextField('ReceiptSubject', _t('ShopConfig.SUBJECT_LINE', 'Subject line')),
 					TextareaField::create('ReceiptBody', _t('ShopConfig.MESSAGE', 'Message'))
 						->setRightTitle(_t('ShopConfig.MESSAGE_DETAILS', 'Order details are included in the email below this message')),

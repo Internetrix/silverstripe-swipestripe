@@ -28,6 +28,7 @@ class ShopConfig extends DataObject {
 		'ReceiptSubject' => 'Varchar',
 		'ReceiptBody' => 'HTMLText',
 		'ReceiptFrom' => 'Varchar',
+		'ReceiptBcc' => 'Varchar',
 		'NotificationSubject' => 'Varchar',
 		'NotificationBody' => 'HTMLText',
 		'NotificationTo' => 'Varchar'
