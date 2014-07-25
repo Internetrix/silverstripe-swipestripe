@@ -55,7 +55,8 @@ class ReceiptEmail extends ProcessedEmail {
 				'Order' => $order,
 				'Customer' => $customer,
 				'InlineCSS' => "<style>$css</style>",
-				'Signature' => $this->signature
+				'Signature' => $this->signature,
+				'SiteConfig' => SiteConfig::get()->first()
 			)
 		);
 

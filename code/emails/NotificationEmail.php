@@ -54,7 +54,8 @@ class NotificationEmail extends ProcessedEmail {
 				'Customer' => $customer,
 				'InlineCSS' => "<style>$css</style>",
 				'Signature' => $this->signature,
-				'AdminLink' => $adminLink
+				'AdminLink' => $adminLink,
+				'SiteConfig' => SiteConfig::get()->first()	
 			)
 		);
 		parent::__construct($from, null, $subject, $body, $bounceHandlerURL, $cc, $bcc);
