@@ -100,18 +100,6 @@ class OrderForm extends Form {
 					TextField::create('Phone', '* TELEPHONE'),
 					TextField::create('Fax', 'Fax')
 				)
-// 				, new CompositeField(
-// 					new LiteralField(
-// 						'AccountInfo', 
-// 						"
-// 						<p class=\"alert alert-info\">
-// 							<strong class=\"alert-heading\">$note</strong>
-// 							$passwd <br /><br />
-// 							$mber
-// 						</p>
-// 						"
-// 					)
-// 				)
 			)->setID('PersonalDetails')->setName('PersonaDetails');
 			
 			

@@ -58,12 +58,12 @@ en:
     ACCOUNT: Account
     ALREADY_MEMBER: 'If you are already a member please %s log in. %s'
     DESCRIPTION: 'Generic content page'
-    EMAIL: Email
+    EMAIL: '* Email'
     MEMBER_ALREADY_EXISTS: 'Sorry, a member already exists with that email address. If this is your email address, please log in first before placing your order.'
     NOTE: 'NOTE:'
     NOTES_ABOUT_ORDER: 'Notes about this order'
     NOT_VALID_METHOD: 'Sorry, that is not a valid payment method.'
-    PASSWORD: Password
+    PASSWORD: '* Password'
     PAYMENT: Payment
     PLEASE_CHOOSE_PASSWORD: 'Please choose a password, so you can login and check your order history in the future.'
     PLEASE_ENTER_EMAIL_ADDRESS: 'Please enter your email address.'
