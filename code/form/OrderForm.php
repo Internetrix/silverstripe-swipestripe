@@ -71,43 +71,38 @@ class OrderForm extends Form {
 		$member = $this->customer;
 
 		//Personal details fields
-		if(!$member->ID || $member->Password == '') {
+		$link = $this->controller->Link();
+		
+		$note = _t('CheckoutPage.NOTE','NOTE:');
+		$passwd = _t('CheckoutPage.PLEASE_CHOOSE_PASSWORD','Please choose a password, so you can login and check your order history in the future.');
+		$mber = sprintf(
+			_t('CheckoutPage.ALREADY_MEMBER', 'If you are already a member please %s log in. %s'), 
+			"<a href=\"Security/login?BackURL=$link\">", 
+			'</a>'
+		);
 
-			$link = $this->controller->Link();
-			
-			$note = _t('CheckoutPage.NOTE','NOTE:');
-			$passwd = _t('CheckoutPage.PLEASE_CHOOSE_PASSWORD','Please choose a password, so you can login and check your order history in the future.');
-			$mber = sprintf(
-				_t('CheckoutPage.ALREADY_MEMBER', 'If you are already a member please %s log in. %s'), 
-				"<a href=\"Security/login?BackURL=$link\">", 
-				'</a>'
-			);
-
-			$personalFields = CompositeField::create(
-				new HeaderField(_t('CheckoutPage.ACCOUNT',"Account"), 3),
-				new CompositeField(
-					$emailfield = EmailField::create('Email', _t('CheckoutPage.EMAIL', 'Email'))
-						->setCustomValidationMessage(_t('CheckoutPage.PLEASE_ENTER_EMAIL_ADDRESS', "Please enter your email address."))
-				),
-				new CompositeField(
-					new FieldGroup(
-						new ConfirmedPasswordField('Password', _t('CheckoutPage.PASSWORD', "* Password"))
-					)
+		$personalFields = CompositeField::create(
+			new HeaderField(_t('CheckoutPage.ACCOUNT',"Account"), 3),
+			new CompositeField(
+				$emailfield = EmailField::create('Email', _t('CheckoutPage.EMAIL', 'Email'))
+					->setCustomValidationMessage(_t('CheckoutPage.PLEASE_ENTER_EMAIL_ADDRESS', "Please enter your email address."))
+			),
+			new CompositeField(
+				new FieldGroup(
+					new ConfirmedPasswordField('Password', _t('CheckoutPage.PASSWORD', "* Password"))
 				)
-				,new CompositeField(
-					TextField::create('FirstName', '* First Name'),
-					TextField::create('Surname', '* Surname'),
-					TextField::create('Phone', '* TELEPHONE'),
-					TextField::create('Fax', 'Fax')
-				)
-			)->setID('PersonalDetails')->setName('PersonaDetails');
-			
-			
-			$memberDO = Member::currentUser();
-			if($memberDO && $memberDO->Email){
-				$emailfield->setValue($memberDO->Email);
-				$personalFields->removeByName('Password');
-			}
+			)
+			,new CompositeField(
+				TextField::create('FirstName', '* First Name'),
+				TextField::create('Surname', '* Surname'),
+				TextField::create('Phone', '* TELEPHONE'),
+				TextField::create('Fax', 'Fax')
+			)
+		)->setID('PersonalDetails')->setName('PersonaDetails');
+		
+		if($member && $member->Email){
+			$emailfield->setValue($memberDO->Email);
+			$personalFields->removeByName('Password');
 		}
 
 		//Order item fields
