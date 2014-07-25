@@ -146,6 +146,8 @@ class Customer extends Member {
 				$memberRecord->ClassName = 'Customer';
 				$memberRecord->write();
 				
+				DB::query('INSERT INTO "Customer" ("ID") VALUES (\''.$memberRecord->ID.'\');');
+				
 				return DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
 			}
 		}
