@@ -838,11 +838,24 @@ class Order_Update extends DataObject {
 
 	private static $singular_name = 'Update';
 	private static $plural_name = 'Updates';
+	
+	private static $couriers = array(
+		'AUSPOST' => 'AUS POST',
+		'FastWay' => 'Fast Way'
+	);
 
 	private static $db = array(
 		'Status' => "Enum('Pending,Processing,Dispatched,Cancelled')",
 		'Note' => 'Text',
+		'InternalNote' => 'Text',
+		'ShipDate' => 'Date',
+		'Courier' => "Varchar(32)",
+		'TrackingID' => "Varchar(128)",
 		'Visible' => 'Boolean'
+	);
+	
+	private static $defaults = array(
+		'Visible' => true
 	);
 
 	/**
@@ -858,9 +871,11 @@ class Order_Update extends DataObject {
 	private static $summary_fields = array(
 		'Created.Nice' => 'Created',
 		'Status' => 'Order Status',
-		'Note' => 'Note',
-		'Member.Name' => 'Owner',
-		'VisibleSummary' => 'Visible'
+		'LoadCourier' => "Courier",
+		'ShipDate.Nice' => 'Date',
+		'TrackingID' => "Tracking ID",
+		'InternalNote' => 'InternalNote',
+		'Member.Name' => 'Owner'
 	);
 
 	public function canDelete($member = null) {
@@ -872,6 +887,31 @@ class Order_Update extends DataObject {
 			parent::delete();
 		}
 	}
+	
+	public function onBeforeWrite() {
+
+		parent::onBeforeWrite();
+		
+		$carriersArray = $this->config()->couriers;
+		$carriersName = '';
+		$selecedCourier = $this->Courier ? $this->Courier : '0';
+		if( ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
+			$carriersName = $carriersArray[$selecedCourier];
+		}
+		
+		$notes = array();
+		
+		$notes['Courier'] 		= $carriersName;
+		$notes['Date'] 			= $this->dbObject('ShipDate')->Nice();
+		$notes['TrackingID'] 	= $this->TrackingID;
+		
+		$this->Note = '';
+		
+		foreach ($notes as $title => $value){
+			$this->Note .= "{$title}  -  {$value}" . "\n\r";
+		}
+	}
+
 
 	/**
 	 * Update stock levels for {@link Item}.
@@ -904,9 +944,31 @@ class Order_Update extends DataObject {
 
 		$memberField = HiddenField::create('MemberID', 'Member', Member::currentUserID());
 		$fields->replaceField('MemberID', $memberField);
+		
 		$fields->removeByName('OrderID');
+		$fields->removeByName('Note');
+		$fields->removeByName('Visible');
+		
+		$fields->addFieldsToTab('Root.Main', array(
+			OptionsetField::create('Courier', 'Couriers', $this->config()->couriers),
+			DateField::create('ShipDate', 'Date')->setConfig( 'showcalendar', true )->setConfig ( 'dateformat', 'dd/MM/YYYY' ),
+			TextField::create('TrackingID', 'Tracking ID')				
+		));
+		
 
 		return $fields;
+	}
+	
+	public function LoadCourier(){
+		
+		$carriersArray = $this->config()->couriers;
+		$carriersName = '';
+		$selecedCourier = $this->Courier ? $this->Courier : '0';
+		if( ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
+			$carriersName = $carriersArray[$selecedCourier];
+		}
+		
+		return $carriersName;
 	}
 
 	public function Created() {
