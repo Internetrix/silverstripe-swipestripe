@@ -93,15 +93,19 @@ class OrderForm extends Form {
 				)
 			)
 			,new CompositeField(
-				TextField::create('FirstName', '* First Name'),
-				TextField::create('Surname', '* Surname'),
-				TextField::create('Phone', '* TELEPHONE'),
-				TextField::create('Fax', 'Fax')
+				$mFN = TextField::create('FirstName', '* First Name'),
+				$mSN = TextField::create('Surname', '* Surname'),
+				$mPh = TextField::create('Phone', '* TELEPHONE'),
+				$mFax = TextField::create('Fax', 'Fax')
 			)
 		)->setID('PersonalDetails')->setName('PersonaDetails');
 		
 		if($member && $member->Email){
-			$emailfield->setValue($memberDO->Email);
+			$emailfield->setValue($member->Email);
+			$mFN->setValue($member->FirstName);
+			$mSN->setValue($member->Surname);
+			$mPh->setValue($member->Phone);
+			$mFax->setValue($member->Fax);
 			$personalFields->removeByName('Password');
 		}
 
