@@ -316,6 +316,9 @@ class OrderForm extends Form {
 
 		//Save or create a new customer/member if user 
 		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
+		
+		$mailingList = MailingList::get()->byID(1);
+		
 		if( ! $IsGuest){
 			//if it's not guest checkout, do the normal process.
 			if (!$member->exists()) {
@@ -360,6 +363,25 @@ class OrderForm extends Form {
 				$member->Password = '';
 				$member->write();
 				$member->logIn();
+			}
+		}
+		
+		//if user is not reseller, add it to newsletter list.
+		if( ! $this->isReseller && $member->Email && $mailingList && $mailingList->ID){
+			$mailRecipient = Recipient::get()->filter(array('Email' => $member->Email))->first();
+			
+			if( ! ($mailRecipient && $mailRecipient->ID)){
+				$mailRecipient = new Recipient();
+				$mailRecipient->Email		= $member->Email;
+				$mailRecipient->FirstName	= $member->FirstName;
+				$mailRecipient->Surname		= $member->Surname;
+				$mailRecipient->write();
+			}
+			
+			//add this recipient into 'Newsetter List' if it's not in there
+			$mailRecMethod = $mailingList->Recipients();
+			if( ! in_array($mailRecipient->ID, array_keys($mailRecMethod->map()->toArray()))){
+				$mailRecMethod->add($mailRecipient);
 			}
 		}
 		
