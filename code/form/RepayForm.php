@@ -59,7 +59,7 @@ class RepayForm extends Form {
 
 		$order = $this->order;
 		$member = $this->customer;
-
+		
 		//Payment fields
 		$supported_methods = PaymentProcessor::get_supported_methods();
 
@@ -67,6 +67,13 @@ class RepayForm extends Form {
 		foreach ($supported_methods as $methodName) {
 			$methodConfig = PaymentFactory::get_factory_config($methodName);
 			$source[$methodName] = $methodConfig['title'];
+		}
+		
+		ksort($source);
+		
+		//change the payment option order if member is in reseller group.
+		if( ! $member->IsReseller() && ! empty($source) && key_exists('Cheque', $source)){
+			unset($source['Cheque']);
 		}
 		
 		$outstanding = $order->TotalOutstanding()->Nice();
