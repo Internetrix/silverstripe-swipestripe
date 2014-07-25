@@ -100,12 +100,12 @@ class OrderForm extends Form {
 			)
 		)->setID('PersonalDetails')->setName('PersonaDetails');
 		
-		if($member && $member->Email){
-			$emailfield->setValue($member->Email);
+		if($member && $member->ID){
 			$mFN->setValue($member->FirstName);
 			$mSN->setValue($member->Surname);
 			$mPh->setValue($member->Phone);
 			$mFax->setValue($member->Fax);
+			$personalFields->replaceField('Email', EmailField::create('Email22', 'Your Email : ' . $member->Email, ' ')->performReadonlyTransformation());
 			$personalFields->removeByName('Password');
 		}
 
