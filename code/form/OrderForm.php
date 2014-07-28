@@ -38,8 +38,7 @@ class OrderForm extends Form {
 		$this->customer = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
 		
 		$this->isReseller = false;
-		$resellerGroup = Group::get()->filter(array('Code' => 'resellers'))->first();
-		if($this->customer && $this->customer->ID && $resellerGroup && $resellerGroup->ID && $this->customer->inGroup($resellerGroup)){
+		if($this->customer && $this->customer->ID && $this->customer->IsReseller()){
 			$this->isReseller = true;
 		}
 
