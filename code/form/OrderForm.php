@@ -123,6 +123,7 @@ class OrderForm extends Form {
 		if ($subTotalMods && $subTotalMods->exists()) foreach ($subTotalMods as $modification) {
 			$modFields = $modification->getFormFields();
 			foreach ($modFields as $field) {
+				$field->addExtraClass('orderform');
 				$subTotalModsFields->push($field);
 			}
 		}
@@ -133,6 +134,7 @@ class OrderForm extends Form {
 		if ($totalMods && $totalMods->exists()) foreach ($totalMods as $modification) {
 			$modFields = $modification->getFormFields();
 			foreach ($modFields as $field) {
+				$field->addExtraClass('orderform');
 				$totalModsFields->push($field);
 			}
 		}
