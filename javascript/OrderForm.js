@@ -32,6 +32,12 @@
 					},
 					success: function(data){
 						$('#checkout-order-table').replaceWith(data);
+						
+						$('#shipping-text').qtip({
+						    content: {
+						        attr: 'data-text'
+						    }
+						});
 					},
 					complete: function() {
 						$('#cart-loading-js').hide();
