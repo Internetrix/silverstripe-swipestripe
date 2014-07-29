@@ -440,6 +440,12 @@ class Order extends DataObject implements PermissionProvider {
 	 * @return String URL for viewing this order
 	 */
 	public function Link($isReseller = false) {
+		
+		$member = Member::currentUser();
+		if($isReseller == false && $member && $member->ID && $member->IsReseller()){
+			$isReseller = true;
+		}
+		
 		//get the account page and go to it
 		if($isReseller){
 			$account = ResellerAccountPage::get()->filter(array('ClassName' => 'ResellerAccountPage'))->first();
