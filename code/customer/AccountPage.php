@@ -171,8 +171,13 @@ class AccountPage_Controller extends Page_Controller {
 			if($member->IsGuest){
 				$member->logOut();
 			}
-
+			
+			
+			$pageTitle = 'Order #' . $orderID;
+			$this->extracrumbs[] = Page::create()->setField('Title', $pageTitle);
+			
 			return array(
+				'Title' => $pageTitle,	
 				'Order' => $order
 			);
 		}
