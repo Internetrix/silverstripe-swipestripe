@@ -38,6 +38,8 @@ class Modification extends DataObject {
 	);
 
 	private static $default_sort = 'SortOrder ASC';
+	
+	protected $reseller_au_shipping = null;
 
 	public static function get_all() {
 		$mods = new ArrayList();
@@ -92,5 +94,55 @@ class Modification extends DataObject {
 	public function getFormFields() {
 		return new FieldList();
 	}
+	
+	
+	
+	//only for shipping
+	public function DescForOrderTable(){
+	
+		if($this->ClassName == 'FlatFeeShippingModification' && $this->IsAuResellerShipping() === true){
+			return 'Shipping - Australia';
+		}
+	
+		return $this->Description;
+	}
+	
+	public function PriceForOrderTable(){
+	
+		if($this->ClassName == 'FlatFeeShippingModification' && $this->IsAuResellerShipping() === true){
+			return 'T.B.D';
+		}
+	
+		return $this->Price()->Nice();
+	}
+	
+	
+	public function IsAuResellerShipping(){
+		if($this->reseller_au_shipping === null){
+			//havent check it before. then check it
+			$order 		= $this->Order();
+			$rate 		= $this->FlatFeeShippingRate();
+			$Country 	= ($rate && $rate->ID) ? $rate->Country() : false;
+				
+			if($order && $order->ID && $Country && $Country->ID && $Country->Code == 'AU'){
+				$member = $order->Member();
+					
+				if($member && $member->ID && $member->IsReseller()){
+					$this->reseller_au_shipping = true;
+					return $this->reseller_au_shipping;
+				}
+			}
+				
+			$this->reseller_au_shipping = false;
+			return $this->reseller_au_shipping;
+		}
+	
+		//return the checked result
+		return $this->reseller_au_shipping;
+	}
+	
+	
+	
+	
 	
 }
