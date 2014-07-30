@@ -101,7 +101,7 @@ class Modification extends DataObject {
 	public function DescForOrderTable(){
 	
 		if($this->ClassName == 'FlatFeeShippingModification' && $this->IsAuResellerShipping() === true){
-			return 'Shipping - Australia';
+			return 'Shipping - Freight charges apply and will be added to your invoice';
 		}
 	
 		return $this->Description;
@@ -110,7 +110,7 @@ class Modification extends DataObject {
 	public function PriceForOrderTable(){
 	
 		if($this->ClassName == 'FlatFeeShippingModification' && $this->IsAuResellerShipping() === true){
-			return 'T.B.D';
+			return '';
 		}
 	
 		return $this->Price()->Nice();
