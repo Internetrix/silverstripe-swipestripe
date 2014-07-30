@@ -703,6 +703,17 @@ class Order extends DataObject implements PermissionProvider {
 		}
 		return $status;
 	}
+	
+	public function LoadPaymentStatus(){
+		
+		$paymentDO = $this->Payments()->sort('"ID" DESC')->first();
+		
+		if($paymentDO->Method == 'Cheque'){
+			return 'Invoice';
+		}else{
+			return 'PaymentStatus';
+		}
+	}
 
 	/**
 	 * Save modifiers for this Order at the checkout process. 
