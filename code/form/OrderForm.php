@@ -149,11 +149,6 @@ class OrderForm extends Form {
 		
 		ksort($source);
 		
-		//change the payment option order if member is in reseller group.
-		if( ! $this->isReseller && ! empty($source) && key_exists('Cheque', $source)){
-			unset($source['Cheque']);
-		}
-
 		$paymentFields = CompositeField::create(
 			new HeaderField(_t('CheckoutPage.PAYMENT',"Payment"), 3),
 			DropDownField::create(

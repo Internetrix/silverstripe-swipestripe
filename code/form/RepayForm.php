@@ -71,11 +71,6 @@ class RepayForm extends Form {
 		
 		ksort($source);
 		
-		//change the payment option order if member is in reseller group.
-		if( ! $member->IsReseller() && ! empty($source) && key_exists('Cheque', $source)){
-			unset($source['Cheque']);
-		}
-		
 		$outstanding = $order->TotalOutstanding()->Nice();
 
 		$paymentFields = CompositeField::create(
