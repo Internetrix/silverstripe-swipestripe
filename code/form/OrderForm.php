@@ -304,7 +304,7 @@ class OrderForm extends Form {
 		
 		if( ! $IsGuest){
 			//if it's not guest checkout, do the normal process.
-			if (!$member->exists()) {
+			if ( ! $member->exists()) {
 	
 				$existingCustomer = Member::get()->filter('Email', $data['Email']);
 				if ($existingCustomer && $existingCustomer->exists()) {
@@ -332,6 +332,16 @@ class OrderForm extends Form {
 			}
 		}else{
 			if ( ! $member->exists()) {
+				$existingCustomer = Member::get()->filter('Email', $data['Email']);
+				if ($existingCustomer && $existingCustomer->exists()) {
+					$form->sessionMessage(
+							_t('CheckoutPage.MEMBER_ALREADY_EXISTS', 'Sorry, a member already exists with that email address. If this is your email address, please log in first before placing your order.'),
+							'bad'
+					);
+					$this->controller->redirectBack();
+					return false;
+				}
+				
 				$member = Customer::create();
 				$form->saveInto($member);
 				$member->IsGuest = true;
