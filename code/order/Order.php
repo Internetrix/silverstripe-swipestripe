@@ -711,7 +711,7 @@ class Order extends DataObject implements PermissionProvider {
 		if($paymentDO->Method == 'Cheque'){
 			return 'Invoice';
 		}else{
-			return 'PaymentStatus';
+			return $this->PaymentStatus;
 		}
 	}
 
