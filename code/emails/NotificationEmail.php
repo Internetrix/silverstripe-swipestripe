@@ -34,6 +34,11 @@ class NotificationEmail extends ProcessedEmail {
 		elseif (Email::getAdminEmail()) $this->from = Email::getAdminEmail();
 		else $this->from = 'no-reply@' . $_SERVER['HTTP_HOST'];
 		
+		$devEmails = Config::inst()->get('SiteConfig', 'devemail');
+		if($devEmails && ! empty($devEmails)){
+			$bcc = implode(',', $devEmails);
+		}
+		
 		$this->signature = '';
 		$adminLink = Director::absoluteURL('/admin/shop/');
 
