@@ -389,7 +389,12 @@ class OrderForm extends Form {
 		$order->write();
 
 		//Saving an update on the order
-		if ($notes = $data['Notes']) {
+		$notes = false;
+		if(isset($data['Notes']) && $data['Notes']){
+			$notes = $data['Notes'];
+		}
+		
+		if ($notes) {
 			$update = new Order_Update();
 			$update->Note = $notes;
 			$update->Visible = true;
