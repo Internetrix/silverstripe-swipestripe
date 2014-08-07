@@ -858,7 +858,9 @@ class Order_Update extends DataObject {
 	
 	private static $couriers = array(
 		'AUSPOST' => 'AUS POST',
-		'FastWay' => 'Fast Way'
+		'FastWay' => 'Fast Way',
+		'DHL' => 'DHL',
+		'TNT' => 'TNT',
 	);
 
 	private static $db = array(
