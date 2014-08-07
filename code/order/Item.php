@@ -158,7 +158,7 @@ class Item extends DataObject {
 		
 		$Variation = Variation::get()->byID($this->VariationID);
 		
-		if( ! $Variation || ! $Variation->ID){
+		if( ! $Variation || ! $Variation->ID || ! $this->ID){
 			$Variation = Versioned::get_version('Variation', $this->VariationID, $this->VariationVersion);
 		}
 		
