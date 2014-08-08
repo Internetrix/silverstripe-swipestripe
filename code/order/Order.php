@@ -974,7 +974,7 @@ class Order_Update extends DataObject {
 	}
 	
 	public function LoadCouriersArray(){
-		$couriersMap = ShippingCourier::get();
+		$couriersMap = ShippingCourier::get()->filter(array('ShopConfigID' => 1));
 		
 		if($couriersMap && $couriersMap->count()){
 			return $couriersMap->map()->toArray();
@@ -985,17 +985,11 @@ class Order_Update extends DataObject {
 	
 	public function LoadCourier(){
 		
-		$carriersArray = ShippingCourier::get();
-		
-		if($carriersArray && $carriersArray->Count()){
-			$carriersArray = $carriersArray->map()->toArray();
-		}else{
-			$carriersArray = array();
-		}
+		$carriersArray = $this->LoadCouriersArray();
 		
 		$carriersName = '';
 		$selecedCourier = $this->Courier ? $this->Courier : '0';
-		if( ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
+		if( $carriersArray && ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
 			$carriersName = $carriersArray[$selecedCourier];
 		}
 		
