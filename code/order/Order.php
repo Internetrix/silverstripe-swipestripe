@@ -856,13 +856,6 @@ class Order_Update extends DataObject {
 	private static $singular_name = 'Update';
 	private static $plural_name = 'Updates';
 	
-	private static $couriers = array(
-		'AUSPOST' => 'AUS POST',
-		'FastWay' => 'Fast Way',
-		'DHL' => 'DHL',
-		'TNT' => 'TNT',
-	);
-
 	private static $db = array(
 		'Status' => "Enum('Pending,Processing,Dispatched,Cancelled')",
 		'Note' => 'Text',
@@ -911,10 +904,10 @@ class Order_Update extends DataObject {
 
 		parent::onBeforeWrite();
 		
-		$carriersArray = $this->config()->couriers;
+		$carriersArray = $this->LoadCouriersArray();
 		$carriersName = '';
 		$selecedCourier = $this->Courier ? $this->Courier : '0';
-		if( ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
+		if( $carriersArray && ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
 			$carriersName = $carriersArray[$selecedCourier];
 		}
 		
@@ -968,19 +961,38 @@ class Order_Update extends DataObject {
 		$fields->removeByName('Note');
 		$fields->removeByName('Visible');
 		
-		$fields->addFieldsToTab('Root.Main', array(
-			OptionsetField::create('Courier', 'Couriers', $this->config()->couriers),
-			DateField::create('ShipDate', 'Date')->setConfig( 'showcalendar', true )->setConfig ( 'dateformat', 'dd/MM/YYYY' ),
-			TextField::create('TrackingID', 'Tracking ID')				
-		));
-		
+		$couriersMap = $this->LoadCouriersArray();
+		if($couriersMap){
+			$fields->addFieldsToTab('Root.Main', array(
+				OptionsetField::create('Courier', 'Couriers', $couriersMap),
+				DateField::create('ShipDate', 'Date')->setConfig( 'showcalendar', true )->setConfig ( 'dateformat', 'dd/MM/YYYY' ),
+				TextField::create('TrackingID', 'Tracking ID')				
+			));
+		}
 
 		return $fields;
 	}
 	
+	public function LoadCouriersArray(){
+		$couriersMap = ShippingCourier::get();
+		
+		if($couriersMap && $couriersMap->count()){
+			return $couriersMap->map()->toArray();
+		}
+		
+		return false;
+	}
+	
 	public function LoadCourier(){
 		
-		$carriersArray = $this->config()->couriers;
+		$carriersArray = ShippingCourier::get();
+		
+		if($carriersArray && $carriersArray->Count()){
+			$carriersArray = $carriersArray->map()->toArray();
+		}else{
+			$carriersArray = array();
+		}
+		
 		$carriersName = '';
 		$selecedCourier = $this->Courier ? $this->Courier : '0';
 		if( ! empty($carriersArray) && $selecedCourier && key_exists($selecedCourier, $carriersArray)){
