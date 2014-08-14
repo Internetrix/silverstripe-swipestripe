@@ -169,7 +169,7 @@ class AccountPage_Controller extends Page_Controller {
 			}
 			
 			if($member->IsGuest){
-				$member->logOut();
+				//$member->logOut();
 			}
 			
 			
