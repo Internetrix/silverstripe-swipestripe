@@ -88,7 +88,12 @@ class Customer extends Member {
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
 		
-		
+		$fields->removeByName('CountryCode');
+		$fields->removeByName('RegionCode');
+		$fields->removeByName('RegionName');
+		$fields->removeByName('Code');
+		$fields->removeByName('CanSeePrice');
+		$fields->removeByName('OrderCount');
 		
 		$ShippingAdressGF = $fields->dataFieldByName('ShippingAddresses');
 		$ShippingAdressGF
