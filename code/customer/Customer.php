@@ -86,33 +86,37 @@ class Customer extends Member {
 	 * @return FieldList
 	 */
 	public function getCMSFields() {
-
-		$fields = new FieldList();
-
-		$fields->push(new TabSet('Root', 
-			Tab::create('Customer')
-		));
-
-		$password = new ConfirmedPasswordField(
-			'Password', 
-			null, 
-			null, 
-			null, 
-			true // showOnClick
-		);
-		$password->setCanBeEmpty(true);
-		if(!$this->ID) $password->showOnClick = false;
-
-		$fields->addFieldsToTab('Root.Customer', array(
-			new TextField('FirstName'),
-			new TextField('Surname'),
-			new EmailField('Email'),
-			new ConfirmedPasswordField('Password'),
-			$password
-		));
-
-		$this->extend('updateCMSFields', $fields);
-
+		$fields = parent::getCMSFields();
+		
+		
+		
+		$ShippingAdressGF = $fields->dataFieldByName('ShippingAddresses');
+		$ShippingAdressGF
+			->getConfig()
+				->removeComponentsByType('GridFieldAddExistingAutocompleter')
+				->removeComponentsByType('GridFieldAddNewButton')
+				->removeComponentsByType('GridFieldDeleteAction')
+				->removeComponentsByType('GridFieldEditButton')
+		;
+		
+		$BillingAdressGF = $fields->dataFieldByName('BillingAddresses');
+		$BillingAdressGF
+			->getConfig()
+				->removeComponentsByType('GridFieldAddExistingAutocompleter')
+				->removeComponentsByType('GridFieldAddNewButton')
+				->removeComponentsByType('GridFieldDeleteAction')
+				->removeComponentsByType('GridFieldEditButton')
+		;
+		
+		$OrdersGF = $fields->dataFieldByName('Orders');
+		$OrdersGF
+			->getConfig()
+				->removeComponentsByType('GridFieldAddExistingAutocompleter')
+				->removeComponentsByType('GridFieldAddNewButton')
+				->removeComponentsByType('GridFieldDeleteAction')
+				->removeComponentsByType('GridFieldEditButton')
+		;
+		
 		return $fields;
 	}
 	
