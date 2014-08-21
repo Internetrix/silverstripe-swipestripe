@@ -1,0 +1,6 @@
+---
+Name: googlemerchant
+---
+Director:
+  rules:
+    'products.xml': 'GoogleMerchantController'
