@@ -9,22 +9,22 @@
 		<item>
 			<% if ClassName = SimpleProduct %>
 				<g:id>$ID</g:id>
-				<g:title>$MasterProduct.Title.XML</g:title>
-				<g:description>$MasterProduct.Content.XML</g:description>
-				<g:link>http://uglyfisheyewear.com/{$ProductLink}</g:link>
-				<g:condition><% if $IsNewPro %>new<% end_if %></g:condition>
-				<g:price>$Price.Nice</g:price>
-				<g:availability>1</g:availability>
-				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168).URL}</g:image_link>
+				<g:title>$MasterProduct.Title.LimitWordCountXML(130)</g:title>
+				<g:description>$MasterProduct.Content.LimitWordCountXML(4500)</g:description>
+				<g:link>http://uglyfisheyewear.com{$ProductLink}</g:link>
+				<g:condition>new</g:condition>
+				<g:price>$PriceXML</g:price>
+				<g:availability><% if $Availability == "Unavailable" %>out of stock<% else %>in stock<% end_if %></g:availability>
+				<g:image_link>http://uglyfisheyewear.com{$ProductThumbnail.URL}</g:image_link>
 			<% else %>
 				<g:id>$ID</g:id>
-				<g:title>$Title.XML</g:title>
-				<g:description>$Content.XML</g:description>
-				<g:link>http://uglyfisheyewear.com/{$ProductLink}</g:link>
-				<g:condition><% if $IsNewPro %>new<% end_if %></g:condition>
-				<g:price>$Price.Nice</g:price>
-				<g:availability>1</g:availability>
-				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168).URL}</g:image_link>
+				<g:title>$Title.LimitWordCountXML(130)</g:title>
+				<g:description>$Content.LimitWordCountXML(4500)</g:description>
+				<g:link>http://uglyfisheyewear.com{$ProductLink}</g:link>
+				<g:condition>new</g:condition>
+				<g:price>$PriceXML</g:price>
+				<g:availability><% if $Availability == "Unavailable" %>out of stock<% else %>in stock<% end_if %></g:availability>
+				<g:image_link>http://uglyfisheyewear.com{$ProductThumbnail.URL}</g:image_link>
 			<% end_if %>
 		</item>
 	<% end_loop %>
