@@ -15,7 +15,7 @@
 				<g:condition><% if $IsNewPro %>new<% end_if %></g:condition>
 				<g:price>$Price.Nice</g:price>
 				<g:availability>1</g:availability>
-				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168)}</g:image_link>
+				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168).URL}</g:image_link>
 			<% else %>
 				<g:id>$ID</g:id>
 				<g:title>$Title.XML</g:title>
@@ -24,7 +24,7 @@
 				<g:condition><% if $IsNewPro %>new<% end_if %></g:condition>
 				<g:price>$Price.Nice</g:price>
 				<g:availability>1</g:availability>
-				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168)}</g:image_link>
+				<g:image_link>http://uglyfisheyewear.com/{$ProductThumbnail.SetSize(224,168).URL}</g:image_link>
 			<% end_if %>
 		</item>
 	<% end_loop %>
