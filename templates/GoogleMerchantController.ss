@@ -10,7 +10,7 @@
 			<% if ClassName = SimpleProduct %>
 				<g:id>$ID</g:id>
 				<g:brand>Ugly Fish Eyewear</g:brand>
-				<g:mpn>ss{$ID}</g:mpn>
+				<g:mpn>uf-{$ID}</g:mpn>
 				<g:title>$MasterProduct.Title.LimitWordCountXML(130)</g:title>
 				<g:description>$MasterProduct.Content.LimitWordCountXML(4500)</g:description>
 				<g:link>http://uglyfisheyewear.com{$ProductLink}</g:link>
@@ -21,7 +21,7 @@
 			<% else %>
 				<g:id>$ID</g:id>
 				<g:brand>Ugly Fish Eyewear</g:brand>
-				<g:mpn>ss{$ID}</g:mpn>
+				<g:mpn>uf-{$ID}</g:mpn>
 				<g:title>$Title.LimitWordCountXML(130)</g:title>
 				<g:description>$Content.LimitWordCountXML(4500)</g:description>
 				<g:link>http://uglyfisheyewear.com{$ProductLink}</g:link>
