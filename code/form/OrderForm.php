@@ -318,6 +318,21 @@ class OrderForm extends Form {
 	
 				$member = Customer::create();
 				$form->saveInto($member);
+				
+				//validate the password
+				$memberValid = $member->validate();
+				if ( $memberValid && ! $memberValid->valid()) {
+					
+					$errorMSG = $memberValid->message();
+					
+					$form->sessionMessage(
+						$errorMSG,
+						'bad'
+					);
+					$this->controller->redirectBack();
+					return false;
+				}
+				
 				$member->write();
 				$member->addToGroupByCode('customers');
 				$member->logIn();
