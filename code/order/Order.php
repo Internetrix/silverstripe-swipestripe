@@ -559,9 +559,17 @@ class Order extends DataObject implements PermissionProvider {
 				if ($variation && $variation->exists()) {
 					$item->VariationID = $variation->ID;
 					$item->VariationVersion = $variation->Version;
-
-					//TODO: Do not use Amount() here, need another accessor to support price discounts and changes though
-					$item->Price += $variation->Amount()->getAmount();
+					
+					//if variation has linked to a simple product. use the simple product amount()
+					$simpleProduct = $variation->getLinkProductDO();
+					if($simpleProduct && $simpleProduct->ID){
+						
+						$item->Price = $simpleProduct->Amount()->getAmount();
+						
+					}else{
+						//TODO: Do not use Amount() here, need another accessor to support price discounts and changes though
+						$item->Price += $variation->Amount()->getAmount();
+					}
 				}
 
 				$item->Quantity = $quantity;
