@@ -7,10 +7,14 @@
 		<tr>
 			<td>
 				$OrderedOn.Format(j M Y - g:i a)<br />
-				($PaymentStatus)
+                ($LoadPaymentStatus)
 			</td>
 		</tr>
 	</table>
+	
+    <% include PON %>
+	
+	<% include OrderAddresses %>
 
 	<% include Order %>
 		

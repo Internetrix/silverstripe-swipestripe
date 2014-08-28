@@ -99,6 +99,8 @@ class OrderForm extends Form {
 			)
 		)->setID('PersonalDetails')->setName('PersonaDetails');
 		
+		$ShowPONfield = false;	
+			
 		if($member && $member->ID){
 			$mFN->setValue($member->FirstName);
 			$mSN->setValue($member->Surname);
@@ -106,6 +108,10 @@ class OrderForm extends Form {
 			$mFax->setValue($member->Fax);
 			$personalFields->replaceField('Email', EmailField::create('Email22', 'Your Email : ' . $member->Email, ' ')->performReadonlyTransformation());
 			$personalFields->removeByName('Password');
+			
+			if($member->IsReseller()){
+				$ShowPONfield = true;
+			}
 		}
 
 		//Order item fields
@@ -149,8 +155,19 @@ class OrderForm extends Form {
 		
 		ksort($source);
 		
+		//add PO# for reseller checkout.
+		if($ShowPONfield){
+			$PON_field = CompositeField::create(
+				TextField::create('PON', 'Purchase Order Number'),
+				HiddenField::create('ShowPON', 'ShowPON', true)
+			);
+		}else{
+			$PON_field = HiddenField::create('PON', 'PON');
+		}
+		
 		$paymentFields = CompositeField::create(
 			new HeaderField(_t('CheckoutPage.PAYMENT',"Payment"), 3),
+			$PON_field,
 			DropDownField::create(
 				'PaymentMethod',
 				'Select Payment Method',

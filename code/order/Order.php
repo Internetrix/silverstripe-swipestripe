@@ -45,6 +45,9 @@ class Order extends DataObject implements PermissionProvider {
 		'OrderedOn' => 'SS_Datetime',
 		'LastActive' => 'SS_Datetime',
 		'Env' => 'Varchar(10)',
+			
+		'ShowPON' => 'Boolean',		//Purchase Order Number / PO#
+		'PON' => 'Varchar(255)'		//Purchase Order Number / PO#
 	);
 
 	public function Total() {
