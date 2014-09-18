@@ -51,12 +51,12 @@ class DispatchEmail extends ProcessedEmail {
 		
 		$this->populateTemplate(
 				array(
-						'Message' => $siteConfig->DispatchBody,
+						'Message' => nl2br($siteConfig->DispatchBody),
 						'Order' => $order,
 						'OrderUpdate' => $OrderUpdate,
 						'Customer' => $customer,
 						'InlineCSS' => "<style>$css</style>",
-						'Signature' => $this->signature,
+						'Signature' => nl2br($this->signature),
 						'SiteConfig' => SiteConfig::get()->first()
 				)
 		);
