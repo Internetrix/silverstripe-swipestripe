@@ -874,11 +874,13 @@ class Order_Update extends DataObject {
 		'ShipDate' => 'Date',
 		'Courier' => "Varchar(32)",
 		'TrackingID' => "Varchar(128)",
-		'Visible' => 'Boolean'
+		'Visible' => 'Boolean',
+		'SendEmail' => 'Boolean'
 	);
 	
 	private static $defaults = array(
-		'Visible' => true
+		'Visible' 	=> true,
+		'SendEmail' => true,
 	);
 
 	/**
@@ -977,7 +979,9 @@ class Order_Update extends DataObject {
 			$fields->addFieldsToTab('Root.Main', array(
 				OptionsetField::create('Courier', 'Couriers', $couriersMap),
 				DateField::create('ShipDate', 'Date')->setConfig( 'showcalendar', true )->setConfig ( 'dateformat', 'dd/MM/YYYY' ),
-				TextField::create('TrackingID', 'Tracking ID')				
+				TextField::create('TrackingID', 'Tracking ID'),
+				CheckboxField::create('SendEmail', 'Send dispatch notification email to customer.')
+					->displayIf ( "Status" )->isEqualTo ( "Dispatched" )->end ()				
 			));
 		}
 
