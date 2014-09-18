@@ -876,7 +876,8 @@ class Order_Update extends DataObject {
 		'TrackingID' => "Varchar(128)",
 		'TrackingLink' => "Varchar(255)",
 		'Visible' => 'Boolean',
-		'SendEmail' => 'Boolean'
+		'SendEmail' => 'Boolean',
+		'DoneEmail'	 => 'Boolean'
 	);
 	
 	private static $defaults = array(
@@ -963,9 +964,17 @@ class Order_Update extends DataObject {
 		//send dispatch notification to customer
 		$orderDO = $this->Order();
 		$customerDO = $orderDO->Member();
-		if($this->Status == 'Dispatched' && $this->SendEmail){
+		if( ! $this->DoneEmail && $this->Status == 'Dispatched' && $this->SendEmail){
 			DispatchEmail::create($customerDO, $orderDO, $this)
 				->send();
+				
+			if( ! $this->InOnAfterWriteLoop){
+				$this->InOnAfterWriteLoop = true;
+				
+				$this->DoneEmail = true;
+				
+				$this->write();
+			}
 		}
 		
 	}
@@ -987,6 +996,7 @@ class Order_Update extends DataObject {
 		$fields->removeByName('Note');
 		$fields->removeByName('Visible');
 		$fields->removeByName('TrackingLink');
+		$fields->removeByName('DoneEmail');
 		
 		$couriersMap = $this->LoadCouriersArray();
 		if($couriersMap){
@@ -994,10 +1004,19 @@ class Order_Update extends DataObject {
 				OptionsetField::create('Courier', 'Couriers', $couriersMap),
 				DateField::create('ShipDate', 'Date')->setConfig( 'showcalendar', true )->setConfig ( 'dateformat', 'dd/MM/YYYY' ),
 				TextField::create('TrackingID', 'Tracking ID'),
-				CheckboxField::create('SendEmail', 'Send dispatch notification email to customer.')
-					->displayIf ( "Status" )->isEqualTo ( "Dispatched" )->end ()				
 			));
 		}
+		
+		if($this->DoneEmail){
+			ReadonlyField::create('FinishedSentEmail', 'Notification Email', 'Sent')
+				->displayIf ( "Status" )->isEqualTo ( "Dispatched" )->end ();
+		}else{
+			$fields->addFieldsToTab('Root.Main', 
+				CheckboxField::create('SendEmail', 'Send dispatch notification email to customer.')
+					->displayIf ( "Status" )->isEqualTo ( "Dispatched" )->end ()
+			);
+		}
+
 
 		return $fields;
 	}
