@@ -34,12 +34,15 @@ class SendDispatchNotificationTask extends BuildTask {
 		if ($UnsendOrderUpdates && $UnsendOrderUpdates->exists()) foreach ($UnsendOrderUpdates as $updateDO) {
 			
 			$orderDO = $updateDO->Order();
-			$customerDO = $orderDO->Member();
 			
-			if( $orderDO && $customerDO && $orderDO->exists() && $customerDO->exists()){
-				DispatchEmail::create($customerDO, $orderDO, $updateDO)->send();
+			if($orderDO && $orderDO->exists()){
+				$customerDO = $orderDO->Member();
 				
-				$count++;
+				if( $customerDO && $customerDO->exists()){
+					DispatchEmail::create($customerDO, $orderDO, $updateDO)->send();
+				
+					$count++;
+				}
 			}
 				
 			$updateDO->DoneEmail = true;
