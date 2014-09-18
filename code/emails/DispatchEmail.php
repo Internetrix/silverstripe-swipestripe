@@ -55,6 +55,7 @@ class DispatchEmail extends ProcessedEmail {
 						'Order' => $order,
 						'OrderUpdate' => $OrderUpdate,
 						'Customer' => $customer,
+						'CustomerFirstName' => ucfirst($customer->FirstName),
 						'InlineCSS' => "<style>$css</style>",
 						'Signature' => nl2br($this->signature),
 						'SiteConfig' => SiteConfig::get()->first(),
