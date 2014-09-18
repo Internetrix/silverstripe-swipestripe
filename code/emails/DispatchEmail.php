@@ -57,7 +57,8 @@ class DispatchEmail extends ProcessedEmail {
 						'Customer' => $customer,
 						'InlineCSS' => "<style>$css</style>",
 						'Signature' => nl2br($this->signature),
-						'SiteConfig' => SiteConfig::get()->first()
+						'SiteConfig' => SiteConfig::get()->first(),
+						'ShopConfig' => ShopConfig::get()->first()
 				)
 		);
 		
