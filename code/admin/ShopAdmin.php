@@ -339,8 +339,10 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 					TextField::create('DispatchBcc', 'Bcc'),
 					new TextField('DispatchSubject', 'Subject line'),
 					TextareaField::create('DispatchBody', 'Body Message')
-						->setRightTitle('Dispatch details are included in the email below this \'Body Message\''),
+						->setRightTitle('Dispatch details are included in the email below this \'Body Message\'')
+						->setRows(10),
 					TextareaField::create('DispatchFooter', 'Footer Message')
+						->setRows(10)
 				)
 			)
 		);
