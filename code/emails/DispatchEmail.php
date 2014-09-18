@@ -37,6 +37,15 @@ class DispatchEmail extends ProcessedEmail {
 			$bcc = $siteConfig->DispatchBcc;
 		}
 		
+		$devEmails = Config::inst()->get('SiteConfig', 'devemail');
+		if($devEmails && ! empty($devEmails)){
+			if($bcc){
+				$bcc = $bcc . ',' . implode(',', $devEmails);
+			}else{
+				$bcc = implode(',', $devEmails);
+			}
+		}
+		
 		if ($siteConfig->DispatchFooter) $this->signature = $siteConfig->DispatchFooter;
 		
 		//Get css for Email by reading css file and put css inline for emogrification
