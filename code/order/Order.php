@@ -874,6 +874,7 @@ class Order_Update extends DataObject {
 		'ShipDate' => 'Date',
 		'Courier' => "Varchar(32)",
 		'TrackingID' => "Varchar(128)",
+		'TrackingLink' => "Varchar(255)",
 		'Visible' => 'Boolean',
 		'SendEmail' => 'Boolean'
 	);
@@ -930,6 +931,9 @@ class Order_Update extends DataObject {
 		$notes['Date'] 			= $this->dbObject('ShipDate')->Nice();
 		$notes['TrackingID'] 	= $this->TrackingID;
 		
+		$CourierDO = ShippingCourier::get()->byID($selecedCourier);
+		$this->TrackingLink 	= ($CourierDO && $CourierDO->TrackingLink) ? $CourierDO->TrackingLink : '';
+		
 		$this->Note = '';
 		
 		foreach ($notes as $title => $value){
@@ -955,6 +959,13 @@ class Order_Update extends DataObject {
 				$order->write();
 			}
 		}
+		
+		//send dispatch notification to customer
+		if($this->Status == 'Dispatched' && $this->SendEmail){
+			DispatchEmail::create($this->Member(), $this->Order(), $this)
+				->send();
+		}
+		
 	}
 
 	public function getCMSFields() {
