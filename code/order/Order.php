@@ -962,20 +962,20 @@ class Order_Update extends DataObject {
 		}
 		
 		//send dispatch notification to customer
-		$orderDO = $this->Order();
-		$customerDO = $orderDO->Member();
-		if( ! $this->DoneEmail && $this->Status == 'Dispatched' && $this->SendEmail){
-			DispatchEmail::create($customerDO, $orderDO, $this)
-				->send();
+// 		$orderDO = $this->Order();
+// 		$customerDO = $orderDO->Member();
+// 		if( ! $this->DoneEmail && $this->Status == 'Dispatched' && $this->SendEmail){
+// 			DispatchEmail::create($customerDO, $orderDO, $this)
+// 				->send();
 				
-			if( ! $this->InOnAfterWriteLoop){
-				$this->InOnAfterWriteLoop = true;
+// 			if( ! $this->InOnAfterWriteLoop){
+// 				$this->InOnAfterWriteLoop = true;
 				
-				$this->DoneEmail = true;
+// 				$this->DoneEmail = true;
 				
-				$this->write();
-			}
-		}
+// 				$this->write();
+// 			}
+// 		}
 		
 	}
 

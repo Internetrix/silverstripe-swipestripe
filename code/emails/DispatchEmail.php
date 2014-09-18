@@ -29,8 +29,6 @@ class DispatchEmail extends ProcessedEmail {
 		if ($customer->Email) $this->to = $customer->Email;
 		if ($siteConfig->DispatchSubject) $this->subject = $siteConfig->DispatchSubject . ' - Order #'.$order->ID;
 		
-		$this->body = $body;
-		
 		if ($siteConfig->DispatchFrom) $this->from = $siteConfig->DispatchFrom;
 		elseif (Email::getAdminEmail()) $this->from = Email::getAdminEmail();
 		else $this->from = 'no-reply@' . $_SERVER['HTTP_HOST'];
@@ -53,7 +51,7 @@ class DispatchEmail extends ProcessedEmail {
 		
 		$this->populateTemplate(
 				array(
-						'Message' => $this->Body(),
+						'Message' => $siteConfig->DispatchBody,
 						'Order' => $order,
 						'OrderUpdate' => $OrderUpdate,
 						'Customer' => $customer,
