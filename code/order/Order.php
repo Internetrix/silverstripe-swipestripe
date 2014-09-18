@@ -1009,7 +1009,7 @@ class Order_Update extends DataObject {
 		}
 		
 		if($this->DoneEmail){
-			ReadonlyField::create('FinishedSentEmail', 'Notification Email', 'Sent')
+			ReadonlyField::create('SendEmail', 'Notification Email', 'Sent')
 				->displayIf ( "Status" )->isEqualTo ( "Dispatched" )->end ();
 		}else{
 			$fields->addFieldsToTab('Root.Main', 
