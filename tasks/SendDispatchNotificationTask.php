@@ -22,6 +22,7 @@ class SendDispatchNotificationTask extends BuildTask {
 
 	function run($request) {
 		
+		$count = 0;
 		
 		$UnsendOrderUpdates = Order_Update::get()
 			->filter(array(
@@ -37,6 +38,8 @@ class SendDispatchNotificationTask extends BuildTask {
 			
 			if( $orderDO && $customerDO && $orderDO->exists() && $customerDO->exists()){
 				DispatchEmail::create($customerDO, $orderDO, $updateDO)->send();
+				
+				$count++;
 			}
 				
 			$updateDO->DoneEmail = true;
@@ -44,6 +47,7 @@ class SendDispatchNotificationTask extends BuildTask {
 		}
 		
 		
+		echo 'processed '.$count;
 	}
 	
 	
