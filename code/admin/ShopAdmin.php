@@ -333,8 +333,11 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 				),
 				new Tab('DispatchNotification',
 					TextField::create('DispatchFrom', _t('ShopConfig.FROM', 'From')),
-					new TextField('DispatchSubject', 'Email Subject'),
-					TextField::create('DispatchBcc', 'Bcc Address'),
+					TextField::create('ReceiptTo', _t('ShopConfig.TO', 'To'))
+						->setValue(_t('ShopConfig.RECEIPT_TO', 'Sent to customer'))
+						->performReadonlyTransformation(),
+					TextField::create('DispatchBcc', 'Bcc'),
+					new TextField('DispatchSubject', 'Subject line'),
 					TextareaField::create('DispatchBody', 'Body Message')
 						->setRightTitle('Dispatch details are included in the email below this \'Body Message\''),
 					TextareaField::create('DispatchFooter', 'Footer Message')
