@@ -333,7 +333,7 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 				),
 				new Tab('DispatchNotification',
 					TextField::create('DispatchFrom', _t('ShopConfig.FROM', 'From')),
-					TextField::create('ReceiptTo', _t('ShopConfig.TO', 'To'))
+					TextField::create('ReceiptTo2', _t('ShopConfig.TO', 'To'))
 						->setValue(_t('ShopConfig.RECEIPT_TO', 'Sent to customer'))
 						->performReadonlyTransformation(),
 					TextField::create('DispatchBcc', 'Bcc'),
