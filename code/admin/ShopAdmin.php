@@ -341,6 +341,7 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 					TextareaField::create('DispatchBody', 'Body Message')
 						->setRightTitle('Dispatch details are included in the email below this \'Body Message\'')
 						->setRows(10),
+					CheckboxField::create('IncludeDetail', 'Display basic ordered product information in the email.'),
 					TextareaField::create('DispatchFooter', 'Footer Message')
 						->setRows(10)
 				)

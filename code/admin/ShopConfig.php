@@ -34,6 +34,7 @@ class ShopConfig extends DataObject {
 		'NotificationBody' => 'HTMLText',
 		'NotificationTo' => 'Varchar',
 			
+		'IncludeDetail' 	=> 'Boolean',
 		'DispatchFrom' 		=> 'Varchar(255)',
 		'DispatchSubject' 	=> 'Varchar(255)',
 		'DispatchBody' 		=> 'Text',
