@@ -984,6 +984,7 @@ class Order_Update extends DataObject {
 		$fields->removeByName('OrderID');
 		$fields->removeByName('Note');
 		$fields->removeByName('Visible');
+		$fields->removeByName('TrackingLink');
 		
 		$couriersMap = $this->LoadCouriersArray();
 		if($couriersMap){
