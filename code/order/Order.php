@@ -961,8 +961,10 @@ class Order_Update extends DataObject {
 		}
 		
 		//send dispatch notification to customer
+		$orderDO = $this->Order();
+		$customerDO = $orderDO->Member();
 		if($this->Status == 'Dispatched' && $this->SendEmail){
-			DispatchEmail::create($this->Member(), $this->Order(), $this)
+			DispatchEmail::create($customerDO, $orderDO, $this)
 				->send();
 		}
 		
