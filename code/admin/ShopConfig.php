@@ -29,9 +29,16 @@ class ShopConfig extends DataObject {
 		'ReceiptBody' => 'HTMLText',
 		'ReceiptFrom' => 'Varchar',
 		'ReceiptBcc' => 'Varchar',
+			
 		'NotificationSubject' => 'Varchar',
 		'NotificationBody' => 'HTMLText',
-		'NotificationTo' => 'Varchar'
+		'NotificationTo' => 'Varchar',
+			
+		'DispatchFrom' 		=> 'Varchar(255)',
+		'DispatchSubject' 	=> 'Varchar(255)',
+		'DispatchBody' 		=> 'Text',
+		'DispatchFooter' 	=> 'Text',
+		'DispatchBcc' 		=> 'Varchar(255)'
 	);
 
 	private static $has_many = array(

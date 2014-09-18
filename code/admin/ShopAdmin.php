@@ -330,6 +330,14 @@ class ShopAdmin_EmailAdmin extends ShopAdmin {
 					new TextField('NotificationSubject', _t('ShopConfig.SUBJECT_LINE', 'Subject line')),
 					TextareaField::create('NotificationBody', _t('ShopConfig.MESSAGE', 'Message'))
 						->setRightTitle(_t('ShopConfig.MESSAGE_DETAILS', 'Order details are included in the email below this message'))
+				),
+				new Tab('DispatchNotification',
+					TextField::create('DispatchFrom', _t('ShopConfig.FROM', 'From')),
+					new TextField('DispatchSubject', 'Email Subject'),
+					TextField::create('DispatchBcc', 'Bcc Address'),
+					TextareaField::create('DispatchBody', 'Body Message')
+						->setRightTitle('Dispatch details are included in the email below this \'Body Message\''),
+					TextareaField::create('DispatchFooter', 'Footer Message')
 				)
 			)
 		);
