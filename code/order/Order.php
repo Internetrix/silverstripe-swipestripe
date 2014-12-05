@@ -522,13 +522,14 @@ class Order extends DataObject implements PermissionProvider {
 	 * @param DataObject $product The product to be represented by this order item
 	 * @param ArrayList $productOptions The product variations to be added, usually just one
 	 */
-	public function addItem(Product $product, Variation $variation, $quantity = 1, ArrayList $options = null) {
+	public function addItem($message = '', Product $product, Variation $variation, $quantity = 1, ArrayList $options = null) {	//modified in 2.1-bx
 
 		//Increment the quantity if this item exists already
 		$item = $this->findIdenticalItem($product, $variation, $options);
 
 		if ($item && $item->exists()) {
 			$item->Quantity = $item->Quantity + $quantity;
+			$item->Message = $message ? $message : $item->Message;						//added in 2.1-bx
 			$item->write();
 		}
 		else {
@@ -544,6 +545,7 @@ class Order extends DataObject implements PermissionProvider {
 				//TODO: Do not use Amount() here, need another accessor to support price discounts and changes though
 				$item->Price = $product->Amount()->getAmount();
 				$item->Currency = $product->Amount()->getCurrency();
+				$item->Message = $message;					//added in 2.1-bx
 
 				if ($variation && $variation->exists()) {
 					$item->VariationID = $variation->ID;

@@ -178,6 +178,7 @@ class ProductForm extends Form {
 
 		Cart::get_current_order(true)
 			->addItem(
+				$this->getMessage(),		//added in 2.1-bx
 				$this->getProduct(), 
 				$this->getVariation(), 
 				$this->getQuantity(), 
