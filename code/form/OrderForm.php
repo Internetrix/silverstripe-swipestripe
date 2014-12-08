@@ -323,6 +323,7 @@ class OrderForm extends Form {
 				'Currency' => $order->Total()->getCurrency(),
 				'Reference' => $order->ID,
 				'Customer' 	=> array(
+					'ID'			=> $member->ID,
 					'FirstName' 	=> $member->FirstName,
 					'LastName' 	=> $member->Surname,
 					'Phone' 	=> $member->Phone,
