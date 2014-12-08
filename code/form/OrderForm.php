@@ -310,7 +310,8 @@ class OrderForm extends Form {
 		//Add modifiers to order
 		$order->updateModifications($data)->write();
 
-		Session::clear('Cart.OrderID');
+//		removed session clearing here and added it to the onBeforeInit extension hook in Cart.php
+// 		Session::clear('Cart.OrderID');
 
 		$order->onBeforePayment();
 

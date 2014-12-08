@@ -88,6 +88,10 @@ class Cart extends Extension {
 		if ($orderID && $order = DataObject::get_by_id('Order', $orderID)) {
 			$order->LastActive = SS_Datetime::now()->getValue();
 			$order->write();
+			
+			if($order->Status == 'Processing' && $order->PaymentStatus == 'Paid'){
+				Session::clear('Cart.OrderID');
+			}
 		}
 	}
 }
