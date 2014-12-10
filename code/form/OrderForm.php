@@ -227,6 +227,10 @@ class OrderForm extends Form {
 			$validator->addRequiredField('Password');
 			$validator->addRequiredField('Email');
 		}
+		
+		$validator->addRequiredField('FirstName');
+		$validator->addRequiredField('Surname');
+		$validator->addRequiredField('Phone');
 
 		$this->extend('updateValidator', $validator);
 		$validator->setForm($this);
