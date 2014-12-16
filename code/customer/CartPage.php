@@ -11,24 +11,52 @@
  */
 class CartPage extends Page {
 	
+	private static $icon = 'swipestripe/images/icons/cartpage-file.gif';
+	
 	/**
 	 * Automatically create a CheckoutPage if one is not found
 	 * on the site at the time the database is built (dev/build).
+	 * 
+	 * If Subsite module exists, it will check SiteConfig->EnableShopFeatures.
+	 * page will be created if SiteConfig->EnableShopFeatures = true
 	 */
 	function requireDefaultRecords() {
 		parent::requireDefaultRecords();
-
-		if(!DataObject::get_one('CartPage')) {
+		
+		$this->CreateDefaultPage();
+	}
+	
+	function CreateDefaultPage(SiteConfig $SiteConfig = null){
+		
+		if($SiteConfig === null){
+			$SiteConfig = SiteConfig::get()->first();
+		}
+		
+		$requiredPage = false;
+		
+		if(class_exists('Subsite')){
+			//Check SiteConfig.
+			if($SiteConfig && $SiteConfig->EnableShopFeatures){
+				$requiredPage = true;
+			}
+		}else{
+			//Subsite module is not installed, always creates the page.
+			$requiredPage = true;
+		}
+		
+		if( $requiredPage && ! DataObject::get_one('CartPage') ) {
 			$page = new CartPage();
 			$page->Title = 'Cart';
 			$page->Content = '';
 			$page->URLSegment = 'cart';
 			$page->ShowInMenus = 0;
+			$page->write();
 			$page->writeToStage('Stage');
-			$page->publish('Stage', 'Live');
-
+			$page->writeToStage('Live');
+		
 			DB::alteration_message("Cart page 'Cart' created", 'created');
 		}
+		
 	}
 	
 	/**

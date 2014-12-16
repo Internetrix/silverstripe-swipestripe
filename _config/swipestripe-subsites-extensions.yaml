@@ -1,0 +1,9 @@
+---
+name: swipestripe-subsites-extensions
+Only:
+  classexists: 'Subsite'
+---
+SiteConfig:
+  extensions:
+    - 'SwipestripeSubsiteSiteconfigExtension'
+
