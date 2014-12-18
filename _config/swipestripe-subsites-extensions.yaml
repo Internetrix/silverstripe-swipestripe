@@ -1,0 +1,13 @@
+---
+name: swipestripe-subsites-extensions
+After:
+  - '#SwipeStripe'
+Only:
+  classexists: 'Subsite'
+---
+SiteConfig:
+  extensions:
+    - 'SwipestripeSubsiteSiteconfigExtension'
+PaymentProcessor:
+  extensions: 
+    - 'SubsitePayment_ProcessorExtension'
