@@ -330,6 +330,9 @@ class OrderForm extends Form {
 					'Email' 		=> $member->Email
 				)
 			);
+			
+			$this->extend('updatePaymentData', $paymentData);
+			
 			$paymentProcessor->payment->OrderID = $order->ID;
 			$paymentProcessor->payment->PaidByID = $member->ID;
 
