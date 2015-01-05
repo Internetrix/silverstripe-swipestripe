@@ -120,7 +120,24 @@ class Customer extends Member {
 	static function currentUser() {
 		$id = Member::currentUserID();
 		if($id) {
-			return DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+			$customerRecord = DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+			
+			if($customerRecord && $customerRecord->ID){
+				return $customerRecord;
+			}else{
+				//member exists, mark it as customer
+				$memberRecord = DataObject::get_one("Member", "\"Member\".\"ID\" = $id");
+				$memberRecord->ClassName = 'Customer';
+				$memberRecord->write();
+				
+				DB::query('INSERT INTO "Customer" ("ID") VALUES (\''.$memberRecord->ID.'\');');
+				
+				$CustomerDO = DataObject::get_one("Customer", "\"Member\".\"ID\" = $id");
+				$CustomerDO->SubsiteID = Subsite::currentSubsiteID();
+				$CustomerDO->write();
+				
+				return $CustomerDO;
+			}
 		}
 	}
 }

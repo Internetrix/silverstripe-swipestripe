@@ -273,7 +273,7 @@ class OrderForm extends Form {
 			$existingMember = Member::get()->filter('Email', $data['Email']);
 			if ($existingMember && $existingMember->exists()) {
 				$form->sessionMessage(
-					_t('CheckoutPage.OLD_MEMBER_ALREADY_EXISTS', 'Sorry, your account with this email address doesn\'t support shop features. Please use another email address for shopping.'),
+					_t('CheckoutPage.OLD_MEMBER_ALREADY_EXISTS', 'Sorry, account with this email address doesn\'t support shop features. Please use another email address for shopping.'),
 					'bad'
 				);
 				$this->controller->redirectBack();
