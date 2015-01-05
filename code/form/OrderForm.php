@@ -269,6 +269,16 @@ class OrderForm extends Form {
 		//Save or create a new customer/member
 		$member = Customer::currentUser() ? Customer::currentUser() : singleton('Customer');
 		if (!$member->exists()) {
+			
+			$existingMember = Member::get()->filter('Email', $data['Email']);
+			if ($existingMember && $existingMember->exists()) {
+				$form->sessionMessage(
+					_t('CheckoutPage.OLD_MEMBER_ALREADY_EXISTS', 'Sorry, your account with this email address doesn\'t support shop features. Please use another email address for shopping.'),
+					'bad'
+				);
+				$this->controller->redirectBack();
+				return false;
+			}
 
 			$existingCustomer = Customer::get()->filter('Email', $data['Email']);
 			if ($existingCustomer && $existingCustomer->exists()) {
