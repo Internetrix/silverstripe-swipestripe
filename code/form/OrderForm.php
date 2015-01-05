@@ -321,7 +321,14 @@ class OrderForm extends Form {
 			$paymentData = array(
 				'Amount' => number_format($order->Total()->getAmount(), $precision, '.', ''),
 				'Currency' => $order->Total()->getCurrency(),
-				'Reference' => $order->ID
+				'Reference' => $order->ID,
+				'Customer' 	=> array(
+					'ID'			=> $member->ID,
+					'FirstName' 	=> $member->FirstName,
+					'LastName' 		=> $member->Surname,
+					'Phone' 		=> $member->Phone,
+					'Email' 		=> $member->Email
+				)
 			);
 			$paymentProcessor->payment->OrderID = $order->ID;
 			$paymentProcessor->payment->PaidByID = $member->ID;
