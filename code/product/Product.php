@@ -279,6 +279,24 @@ class Product extends Page {
 		}
 		return $result;
 	}
+	
+	public function ProductCategoriesForGoogle(){
+		
+		$categories = $this->ProductCategories();
+		
+		if($categories && $categories->Count()){
+			
+			$categoriesNamesArray = $categories->exclude('ID', 11)->map('Title', 'Title')->toArray();
+			
+			$strings = 'Categories ' . implode(', ', $categoriesNamesArray) . '.';
+			
+			$varcharValue = new Varchar();
+			$varcharValue->setValue($strings);
+			
+			return $varcharValue;
+		}
+		
+	}
 
 }
 
