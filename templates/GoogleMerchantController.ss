@@ -19,6 +19,7 @@
 				<g:availability><% if $Availability == "Unavailable" %>out of stock<% else %>in stock<% end_if %></g:availability>
 				<g:image_link>http://uglyfisheyewear.com{$ProductThumbnail.URL}</g:image_link>
 				<g:google_product_category>Apparel &amp; Accessories &gt; Clothing Accessories &gt; Sunglasses</g:google_product_category>
+				<g:product_type>Apparel &amp; Accessories &gt; Clothing Accessories &gt; Sunglasses</g:product_type>
 			<% else %>
 				<g:id>$ID</g:id>
 				<g:brand>Ugly Fish Eyewear</g:brand>
@@ -31,6 +32,7 @@
 				<g:availability><% if $Availability == "Unavailable" %>out of stock<% else %>in stock<% end_if %></g:availability>
 				<g:image_link>http://uglyfisheyewear.com{$ProductThumbnail.URL}</g:image_link>
 				<g:google_product_category>Apparel &amp; Accessories &gt; Clothing Accessories &gt; Sunglasses</g:google_product_category>
+				<g:product_type>Apparel &amp; Accessories &gt; Clothing Accessories &gt; Sunglasses</g:product_type>
 			<% end_if %>
 		</item>
 	<% end_loop %>
