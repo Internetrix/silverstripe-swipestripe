@@ -199,6 +199,12 @@ class Order extends DataObject implements PermissionProvider {
 
 		$administratorPerm = Permission::check('ADMIN') && Permission::check('VIEW_ORDER', 'any', $member);
 		$customerPerm = Permission::check('VIEW_ORDER', 'any', $member) && $member->ID == $this->MemberID;
+		
+		if(class_exists('Subsite')){
+			// we dont wont user seeing other subsites orders.
+			$subsitePerm = Permission::check('VIEW_ORDER', 'any', $member) && $this->SubsiteID == Subsite::currentSubsiteID();
+			return $administratorPerm || $customerPerm || $subsitePerm;
+		}
 
 		return $administratorPerm || $customerPerm;
 	}
@@ -211,6 +217,12 @@ class Order extends DataObject implements PermissionProvider {
 	 */
 	public function canEdit($member = null) {
 		$administratorPerm = Permission::check('ADMIN') && Permission::check('EDIT_ORDER', 'any', $member);
+		
+		if(class_exists('Subsite')){
+			// we dont wont user seeing other subsites orders.
+			$subsitePerm = Permission::check('VIEW_ORDER', 'any', $member) && $this->SubsiteID == Subsite::currentSubsiteID();
+			return $administratorPerm || $subsitePerm;
+		}
 		
 		return $administratorPerm;
 	}
