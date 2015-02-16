@@ -542,8 +542,11 @@ class Order extends DataObject implements PermissionProvider {
 		$item = $this->findIdenticalItem($product, $variation, $options);
 
 		if ($item && $item->exists()) {
+			
 			$item->Quantity = $item->Quantity + $quantity;
 			$item->write();
+			
+			$this->extend('updateOrderAddItem', $item, $quantity);
 		}
 		else {
 
@@ -583,6 +586,8 @@ class Order extends DataObject implements PermissionProvider {
 					$option->ItemID = $item->ID;
 					$option->write();
 				}
+				
+				$this->extend('updateOrderAddItem', $item);
 			}
 			catch (Exception $e) {
 
