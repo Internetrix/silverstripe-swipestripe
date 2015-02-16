@@ -204,6 +204,9 @@ class ProductForm extends Form {
 				'good'
 			);
 		}
+		
+		$this->extend('afterAddProduct', $data);
+		
 		$this->goToNextPage();
 	}
 
