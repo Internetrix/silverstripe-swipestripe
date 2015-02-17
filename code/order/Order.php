@@ -414,12 +414,16 @@ class Order extends DataObject implements PermissionProvider {
 			'Updates',
 			'Updates',
 			$this->Updates(),
-			GridFieldConfig_Basic::create()
+			$uConfig = GridFieldConfig_Basic::create()
 		);
+// 		$uConfig->getComponentByType('GridFieldSortableHeader')->setFieldSorting(array('Member.Name' => 'Thiscouldneverbefound'));
+// 		$uConfig->removeComponentByType('GridFieldSortableHeader');
 		$fields->addFieldToTab('Root.Updates', $listField);
 
 		//Ability to edit fields added to CMS here
 		$this->extend('updateOrderCMSFields', $fields);
+		
+		//$fields->dataFieldByName('Updates')->getConfig()->getComponentByType('GridFieldSortableHeader')->setFieldSorting(array('Member.Name' => 'Thiscouldneverbefound'));
 
 		return $fields;
 	}
@@ -868,7 +872,7 @@ class Order_Update extends DataObject {
 		'Created.Nice' => 'Created',
 		'Status' => 'Order Status',
 		'Note' => 'Note',
-		'Member.Name' => 'Owner',
+		'Member.getName' => 'Owner',			// fixed in 2.1-bx
 		'VisibleSummary' => 'Visible'
 	);
 
