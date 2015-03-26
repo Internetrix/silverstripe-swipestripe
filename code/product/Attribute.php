@@ -194,13 +194,15 @@ class Attribute extends DataObject implements PermissionProvider {
 		}
 
 		//If product variation does not have a complete set of valid options, then disable it
-		$product = $this->Product();
-		$variations = $product->Variations();
-
-		if ($variations) foreach ($variations as $variation) {
-			if (!$variation->hasValidOptions()) {
-				$variation->Status = 'Disabled';
-				$variation->write();
+		if($this->NeedVariation){
+			$product = $this->Product();
+			$variations = $product->Variations();
+	
+			if ($variations) foreach ($variations as $variation) {
+				if (!$variation->hasValidOptions()) {
+					$variation->Status = 'Disabled';
+					$variation->write();
+				}
 			}
 		}
 	}
