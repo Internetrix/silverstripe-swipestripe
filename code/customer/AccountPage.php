@@ -157,7 +157,7 @@ class AccountPage_Controller extends Page_Controller {
 			
 			$member = Customer::currentUser();
 			$order = Order::get()
-				->where("\"Order\".\"ID\" = " . Convert::raw2sql($orderID))
+				->where("\"Order\".\"ID\" = " . Convert::raw2sql((int)$orderID))
 				->First();
 
 			if (!$order || !$order->exists()) {
