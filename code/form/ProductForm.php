@@ -225,11 +225,13 @@ class ProductForm extends Form {
 		$product = null;
 		if($className && class_exists($className) && ctype_digit($productID) && ($product = DataObject::get($className)->byID($productID))){
 			//It's good.
-			$product = DataObject::get($className)->byID($productID);
+			return $product;
+		}else{
+			return null;
 		}
 		/************************************************************************/
 		
-		return $product;
+		
 	}
 
 	private function getVariation() {
