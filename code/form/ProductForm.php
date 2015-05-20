@@ -223,7 +223,8 @@ class ProductForm extends Form {
 		$className = Convert::raw2sql($request->requestVar('ProductClass'));
 		$productID = intval(Convert::raw2sql($request->requestVar('ProductID')));
 		$product = null;
-		if($className && class_exists($className) && $productID){
+		if($className && class_exists($className) && ctype_digit($productID) && ($product = DataObject::get($className)->byID($productID))){
+			//It's good.
 			$product = DataObject::get($className)->byID($productID);
 		}
 		/************************************************************************/
@@ -317,10 +318,10 @@ class ProductForm_Validator extends RequiredFields {
 		$options = $request->postVar('Options');
 		/*********************irx fix********************************************/
 		$className = Convert::raw2sql($data['ProductClass']);
-		$productID = intval(Convert::raw2sql($data['ProductID']));
+		$productID = Convert::raw2sql($data['ProductID']);
 		$product = null;
-		if($className && class_exists($className) && $productID){
-			$product = DataObject::get($className)->byID($productID);
+		if($className && class_exists($className) && ctype_digit($productID) && ($product = DataObject::get($className)->byID($productID))){
+			//It's good.
 		}else{
 			//Have to set an error for Form::validate()
 			$this->errors[] = true;
