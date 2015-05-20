@@ -218,7 +218,17 @@ class ProductForm extends Form {
 	 */
 	private function getProduct() {
 		$request = $this->getRequest();
-		return DataObject::get_by_id($request->requestVar('ProductClass'), $request->requestVar('ProductID'));
+		
+		/*********************irx fix********************************************/
+		$className = Convert::raw2sql($request->requestVar('ProductClass'));
+		$productID = intval(Convert::raw2sql($request->requestVar('ProductID')));
+		$product = null;
+		if($className && class_exists($className) && $productID){
+			$product = DataObject::get($className)->byID($productID);
+		}
+		/************************************************************************/
+		
+		return $product;
 	}
 
 	private function getVariation() {
@@ -305,7 +315,19 @@ class ProductForm_Validator extends RequiredFields {
 		$productVariations = new ArrayList();
 
 		$options = $request->postVar('Options');
-		$product = DataObject::get_by_id($data['ProductClass'], $data['ProductID']);
+		/*********************irx fix********************************************/
+		$className = Convert::raw2sql($data['ProductClass']);
+		$productID = intval(Convert::raw2sql($data['ProductID']));
+		$product = null;
+		if($className && class_exists($className) && $productID){
+			$product = DataObject::get($className)->byID($productID);
+		}else{
+			//Have to set an error for Form::validate()
+			$this->errors[] = true;
+			$valid = false;
+			return $valid;
+		}
+		/************************************************************************/
 		$variations = ($product) ? $product->Variations() : new ArrayList();
 
 		if ($variations && $variations->exists()) foreach ($variations as $variation) {
