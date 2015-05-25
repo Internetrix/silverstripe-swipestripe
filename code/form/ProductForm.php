@@ -218,6 +218,7 @@ class ProductForm extends Form {
 	 */
 	private function getProduct() {
 		/*********************irx fix********************************************/
+		$request = $this->getRequest();
 		$className = Convert::raw2sql($request->requestVar('ProductClass'));
 		$productID = intval(Convert::raw2sql($request->requestVar('ProductID')));
 		$product = null;
