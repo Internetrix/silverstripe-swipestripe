@@ -222,7 +222,7 @@ class ProductForm extends Form {
 		$className = Convert::raw2sql($request->requestVar('ProductClass'));
 		$productID = intval(Convert::raw2sql($request->requestVar('ProductID')));
 		$product = null;
-		if($className && class_exists($className) && ctype_digit($productID) && ($product = DataObject::get($className)->byID($productID))){
+		if($className && class_exists($className) && is_numeric($productID) && ($product = DataObject::get($className)->byID($productID))){
 			//It's good.
 			return $product;
 		}else{
